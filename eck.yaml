@@ -1,0 +1,47 @@
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: quickstart
+  namespace: elastic-system
+spec:
+  version: 7.6.2
+  nodeSets:
+  - name: default
+    count: 1
+    config:
+      node.master: true
+      node.data: true
+      node.ingest: true
+      node.store.allow_mmap: false
+---
+apiVersion: kibana.k8s.elastic.co/v1
+kind: Kibana
+metadata:
+  name: quickstart
+  namespace: elastic-system
+spec:
+  version: 7.6.2
+  count: 1
+  elasticsearchRef:
+    name: quickstart
+  http:
+    tls:
+      selfSignedCertificate:
+        disabled: true
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: kibana-ui
+  namespace: elastic-system
+spec:
+  rules:
+  - host: your.host.name
+    http:
+      paths:
+      - backend:
+          serviceName: quickstart-kb-http
+          servicePort: 5601
+        path: /
+  

@@ -1,0 +1,22 @@
+# helm install nginx-ingress stable/nginx-ingress -n nginx \
+#   --set controller.nodeSelector."kubernetes\.io/hostname"="oracle-2" \
+#   --set controller.service.externalTrafficPolicy="Local" \
+#   --set controller.metrics.enabled=true \
+
+controller:
+  nodeSelector:
+    kubernetes.io/hostname: oracle-2
+  service:
+    externalTrafficPolicy: Local
+  metrics:
+    enabled: true
+  config:
+    use-forwarded-headers: "true"
+    forwarded-for-header: "CF-Connecting-IP"
+defaultBackend:
+  enabled: false
+  # extraArgs:
+  #   port: 8080
+  # image:
+  #   repository: containous/whoami
+  #   tag: latest

@@ -1,0 +1,41 @@
+# helm install mariadb bitnami/mariadb \
+#   --set global.storageClass=local-path \
+#   --set rootUser.password=root \
+#   --set replication.enabled=false \
+#   --set master.nodeSelector."kubernetes\.io/hostname"="master" \
+#   --set slave.replicas=0 \
+#   --set tests.enabled=false \
+#   --set metrics.enabled=true \
+#   --set volumePermissions.enabled=true \
+#   --set db.name=nextcloud \
+#   --set db.user=nextcloud \
+#   --set db.password=nextcloud 
+
+global:
+  storageClass: local-path
+rootUser:
+  password: root
+replication:
+  enabled: false
+master:
+  nodeSelector:
+    kubernetes.io/hostname: master
+  # tolerations:
+  # - key: "controlplane"
+  #   operator: "Exists"
+  #   effect: "NoSchedule"
+
+slave:
+  replicas: 0
+
+tests:
+  enabled: false
+metrics:
+  enabled: true
+volumePermissions:
+  enabled: true
+
+db:
+  name: nextcloud
+  user: nextcloud
+  password: nextcloud 

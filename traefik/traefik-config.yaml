@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: traefik
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: traefik-config
+  namespace: traefik
+data:
+  traefik.yaml: |-
+    global:
+      checknewversion: true
+    ping: true
+    entryPoints:
+      web:
+        address: ":8000"
+      websecure:
+        address: ":8443"
+      traefik:
+        address: ":9000"
+    api:
+      # insecure: true
+      dashboard: true
+    providers:
+      kubernetesIngress: {}
+      kubernetesCRD: {}
+    # log: 
+    #   level: DEBUG
+    accessLog: {}

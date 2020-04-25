@@ -1,0 +1,17 @@
+[Interface]
+PrivateKey = {{ WG_KEY.stdout_lines[0] }}
+ListenPort = {{ ListenPort }}
+SaveConfig = false
+Address = {{ vpn_ip }}/24
+
+{% for host in play_hosts %}
+{% if inventory_hostname != hostvars[host]['inventory_hostname'] %}
+[Peer]
+PublicKey = {{ hostvars[host]['WG_PUB'].stdout_lines[0] }}
+AllowedIPs = {{ hostvars[host]['vpn_ip'] }}/32 {% if site_net != hostvars[host]['site_net'] %}, {{ hostvars[host]['ansible_default_ipv4'].address }}/32 {% endif %}
+
+Endpoint = {{ hostvars[host]['PUBLIC_IP'].stdout_lines[0] }}:{{ ListenPort }}
+PersistentKeepalive = 25
+
+{% endif %}
+{% endfor %}
